@@ -54,15 +54,24 @@ module.exports = function (grunt) {
       options.livereload = DefaultLiveReloadPort;
     }
     if (options.livereload) {
+      if (options.files) {
+        if (!Array.isArray(options.files)) {
+          options.files = [options.files];
+        }
+      }
+      else
+        options.files = options.bases.map(function (base) {
+          return base + '/**/*.*';
+        });
+
       // dynamically add `grunt-contrib-watch` task to manage livereload of static `bases`
       grunt.config.set('watch.' + util.makeServerTaskName(thisTarget, 'livereload'), {
-        files: options.bases.map(function (base) {
-          return base + '/**/*.*';
-        }),
+        files: options.files,
         options: {
           livereload: options.livereload
         }
       });
+      grunt.task.run('watch');
     }
 
     if (options.serverreload) {
