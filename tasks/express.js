@@ -71,7 +71,6 @@ module.exports = function (grunt) {
           livereload: options.livereload
         }
       });
-      grunt.task.run('watch');
     }
 
     if (options.serverreload) {
@@ -97,6 +96,8 @@ module.exports = function (grunt) {
       }
     } else {
       grunt.task.run(['express-server', thisTarget].join(':'));
+      if(options.livereload)
+        grunt.task.run('watch');
     }
   });
 
